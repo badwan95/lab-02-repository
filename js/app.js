@@ -14,6 +14,7 @@ $(document).ready(function() {
         $galleryCopy.find('img').attr('src',this.image_url);
         $galleryCopy.removeAttr('id');
         $galleryCopy.find('p').text(this.description);
+        $galleryCopy.attr('id', this.keyword);
         $('main').append($galleryCopy);
     }
     
