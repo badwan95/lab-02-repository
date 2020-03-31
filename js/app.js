@@ -1,5 +1,6 @@
 $(document).ready(function() {
     // Constructor function for gallery items
+    let existingKeywords = [];
     function Gallery(item) {
       this.image_url = item.image_url;
       this.title = item.title;
@@ -14,11 +15,20 @@ $(document).ready(function() {
         $galleryCopy.find('img').attr('src',this.image_url);
         $galleryCopy.removeAttr('id');
         $galleryCopy.find('p').text(this.description);
-        $galleryCopy.attr('class', this.keyword);
+        // $galleryCopy.attr('id', this.keyword)
+        $galleryCopy.attr('class', `${this.keyword} visible`);
         $('main').append($galleryCopy);
     }
-    
-
+    Gallery.prototype.renderFilter = function () {
+        if (existingKeywords.includes(this.keyword)) {
+        } else {
+            existingKeywords.push(this.keyword);
+            let $optionCopy = $('option:first').clone();
+            $optionCopy.attr('value',this.keyword);
+            $optionCopy.text(this.keyword);
+            $('select').append($optionCopy);
+        }
+    }
     // TO GET THE INFO INSIDE JSON FILE
     const getJson = function(){
         $.ajax('./data/page-1.json', {method: 'get', dataType: 'JSON'}).then(data => {
@@ -27,17 +37,16 @@ $(document).ready(function() {
                 let galleryPicture = new Gallery(value)
                 console.log(galleryPicture);
                 galleryPicture.render();
+                galleryPicture.renderFilter();
             })
         })
     }
     getJson();
+
+    //Event listener for it
+    $('select').on('change', function(){
+        $('section').removeClass('visible');
+        let $buttonValue = $('select option:selected').val();
+        $(`[class*=${$buttonValue}]`).addClass('visible');        
+    })
 });
-
-
-// {
-//     "image_url": "http://3.bp.blogspot.com/_DBYF1AdFaHw/TE-f0cDQ24I/AAAAAAAACZg/l-FdTZ6M7z8/s1600/Unicorn_and_Narwhal_by_dinglehopper.jpg",
-//     "title": "UniWhal",
-//     "description": "A unicorn and a narwhal nuzzling their horns",
-//     "keyword": "narwhal",
-//     "horns": 1
-//   }
