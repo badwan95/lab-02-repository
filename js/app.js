@@ -8,6 +8,7 @@ $(document).ready(function() {
       this.keyword = item.keyword;
       this.horns = item.horns;
     }
+    // To render the images and their title and description to the HTML
     Gallery.prototype.render = function() {
         let $galleryCopy = $('#photo-template').clone();
         $('#photo-template section').remove();
@@ -19,9 +20,9 @@ $(document).ready(function() {
         $galleryCopy.attr('class', `${this.keyword} visible`);
         $('main').append($galleryCopy);
     }
+    // To render the unique filter options depending on the keyword
     Gallery.prototype.renderFilter = function () {
-        if (existingKeywords.includes(this.keyword)) {
-        } else {
+        if (!existingKeywords.includes(this.keyword)) {
             existingKeywords.push(this.keyword);
             let $optionCopy = $('option:first').clone();
             $optionCopy.attr('value',this.keyword);
@@ -42,8 +43,7 @@ $(document).ready(function() {
         })
     }
     getJson();
-
-    //Event listener for it
+    //Event listener for the filter
     $('select').on('change', function(){
         $('section').removeClass('visible');
         let $buttonValue = $('select option:selected').val();
